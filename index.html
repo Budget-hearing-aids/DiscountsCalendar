@@ -144,11 +144,14 @@
                 const discountInfo = document.createElement('div');
                 discountInfo.className = 'discount-info';
 
-                const foundDiscount = discounts.find(d => {
+                // Check if the current date falls within any discount period
+                const activeDiscount = discounts.find(d => {
                     const startDate = new Date(d.startDate);
-                    return currentDate.toDateString() === startDate.toDateString();
+                    const endDate = new Date(d.endDate);
+                    return currentDate >= startDate && currentDate <= endDate;
                 });
 
+                // Check if the current date is one day before a discount starts
                 const isOneDayBefore = discounts.find(d => {
                     const startDate = new Date(d.startDate);
                     const oneDayBefore = new Date(startDate);
@@ -156,13 +159,15 @@
                     return currentDate.toDateString() === oneDayBefore.toDateString();
                 });
 
+                // Show "Discount will be revealed soon!" if it's one day before the start date
                 if (isOneDayBefore) {
                     discountInfo.innerText = 'Discount will be revealed soon!';
                     discountInfo.classList.add('active');
                 }
 
-                if (foundDiscount) {
-                    discountInfo.innerText = foundDiscount.discount;
+                // Show actual discount info if current date falls within the discount period
+                if (activeDiscount) {
+                    discountInfo.innerText = activeDiscount.discount;
                     discountInfo.classList.add('active');
                 }
 
