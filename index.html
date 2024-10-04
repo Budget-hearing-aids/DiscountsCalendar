@@ -144,7 +144,7 @@
                 const discountInfo = document.createElement('div');
                 discountInfo.className = 'discount-info';
 
-                // Check if the current date falls within any discount period
+                // Check if the current date is within the discount period (including start and end date)
                 const activeDiscount = discounts.find(d => {
                     const startDate = new Date(d.startDate);
                     const endDate = new Date(d.endDate);
@@ -166,7 +166,7 @@
                 }
 
                 // Show actual discount info if current date falls within the discount period
-                if (activeDiscount) {
+                if (activeDiscount && currentDate >= new Date(activeDiscount.startDate)) {
                     discountInfo.innerText = activeDiscount.discount;
                     discountInfo.classList.add('active');
                 }
