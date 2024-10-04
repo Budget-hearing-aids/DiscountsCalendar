@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discount Calendar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .day {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .day .date {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .discount-info {
+            color: #888;
+        }
+
+        .discount-info.active {
+            color: #ff6347;
+        }
+
+        .legend {
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .legend span {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #ff6347;
+            color: #fff;
+            border-radius: 3px;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Discount Calendar</h1>
+
+    <div class="calendar" id="calendar">
+        <!-- Calendar days will be injected here by JavaScript -->
+    </div>
+
+    <div class="legend">
+        <span>Discount Details Will Be Available One Day Before</span>
+    </div>
+
+    <script>
+        const discounts = [
+            // October
+            { startDate: '2024-10-08', endDate: '2024-10-09', discount: 'Ion Series $150 off Prime Day' },
+            { startDate: '2024-10-31', endDate: '2024-10-31', discount: 'Halloween Sale (Atom 2 Series) - 2 Emails, 1 Text' },
+
+            // November
+            { startDate: '2024-11-15', endDate: '2024-11-20', discount: '$50 off 2 Series' },
+            { startDate: '2024-11-15', endDate: '2024-11-20', discount: '25% off Ion Series' },
+            { startDate: '2024-11-21', endDate: '2024-11-24', discount: '20% off all products' },
+            { startDate: '2024-11-25', endDate: '2024-11-28', discount: '$125 off Ion Series' },
+            { startDate: '2024-11-29', endDate: '2024-12-01', discount: 'BOGO Atom 2 Series (Fri-Sun)' },
+            { startDate: '2024-11-29', endDate: '2024-12-01', discount: '$150 off Ion Series (Fri-Sun)' },
+            { startDate: '2024-12-02', endDate: '2024-12-04', discount: 'Final Sale: 20% off all products (Cyber Mon-Tues-Wed)' },
+
+            // December
+            { startDate: '2024-12-02', endDate: '2024-12-09', discount: 'QVC Sale (12/2 - 12/9)' },
+            { startDate: '2024-12-14', endDate: '2024-12-19', discount: 'QVC Sale (12/14 - 12/19)' },
+            { startDate: '2024-12-05', endDate: '2024-12-09', discount: '$75 off Atom 2 Series' },
+            { startDate: '2024-12-10', endDate: '2024-12-12', discount: '30% off Ion Series' },
+            { startDate: '2024-12-13', endDate: '2024-12-17', discount: 'BOGO All Products' },
+            { startDate: '2024-12-24', endDate: '2024-12-25', discount: '$150 off Ion Series, $80 off Atom 2 Series' }
+        ];
+
+        function createCalendar(month, daysInMonth) {
+            const calendar = document.getElementById('calendar');
+            calendar.innerHTML = '';  // Clear the calendar if it's being generated for a new month
+
+            const today = new Date();
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const currentDate = new Date(today.getFullYear(), month, day);
+                const dayElement = document.createElement('div');
+                dayElement.className = 'day';
+
+                const dateElement = document.createElement('div');
+                dateElement.className = 'date';
+                dateElement.innerText = `${currentDate.toLocaleString('default', { month: 'long' })} ${day}`;
+
+                const discountInfo = document.createElement('div');
+                discountInfo.className = 'discount-info';
+
+                const foundDiscount = discounts.find(d => {
+                    const startDate = new Date(d.startDate);
+                    const endDate = new Date(d.endDate);
+                    return currentDate >= startDate && currentDate <= endDate;
+                });
+
+                if (foundDiscount) {
+                    const discountStartDate = new Date(foundDiscount.startDate);
+                    if (today.getDate() === discountStartDate.getDate() - 1 && today.getMonth() === discountStartDate.getMonth()) {
+                        discountInfo.innerText = foundDiscount.discount;
+                        discountInfo.classList.add('active');
+                    } else {
+                        discountInfo.innerText = 'Discount Coming Soon!';
+                    }
+                }
+
+                dayElement.appendChild(dateElement);
+                dayElement.appendChild(discountInfo);
+                calendar.appendChild(dayElement);
+            }
+        }
+
+        // Initialize the calendar for October (Month 9 in JavaScript, because months are 0-indexed)
+        createCalendar(9, 31);
+    </script>
+
+</body>
+</html>
