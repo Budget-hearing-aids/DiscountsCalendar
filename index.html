@@ -48,14 +48,6 @@
             color: #ff6347;
         }
 
-        .upcoming-discount {
-            font-size: 20px;
-            color: #ff6347;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-
         .legend {
             max-width: 800px;
             margin: 20px auto;
@@ -104,7 +96,7 @@
     </div>
 
     <div class="legend">
-        <span>Discount Details Will Be Available One Day Before</span>
+        <span>Discount Details Will Be Available One Day Before the Discount Starts</span>
     </div>
 
     <script>
@@ -154,27 +146,24 @@
 
                 const foundDiscount = discounts.find(d => {
                     const startDate = new Date(d.startDate);
-                    const endDate = new Date(d.endDate);
-                    return currentDate >= startDate && currentDate <= endDate;
+                    return currentDate.toDateString() === startDate.toDateString();
                 });
 
-                const isStartDate = discounts.find(d => new Date(d.startDate).toDateString() === currentDate.toDateString());
+                const isOneDayBefore = discounts.find(d => {
+                    const startDate = new Date(d.startDate);
+                    const oneDayBefore = new Date(startDate);
+                    oneDayBefore.setDate(startDate.getDate() - 1);
+                    return currentDate.toDateString() === oneDayBefore.toDateString();
+                });
 
-                if (isStartDate) {
-                    const upcomingSign = document.createElement('div');
-                    upcomingSign.className = 'upcoming-discount';
-                    upcomingSign.innerText = '✨';  // Special sign for upcoming discount
-                    dayElement.appendChild(upcomingSign);
+                if (isOneDayBefore) {
+                    discountInfo.innerText = 'Discount will be revealed soon!';
+                    discountInfo.classList.add('active');
                 }
 
                 if (foundDiscount) {
-                    const discountStartDate = new Date(foundDiscount.startDate);
-                    if (today.getDate() === discountStartDate.getDate() - 1 && today.getMonth() === discountStartDate.getMonth()) {
-                        discountInfo.innerText = foundDiscount.discount;
-                        discountInfo.classList.add('active');
-                    } else {
-                        discountInfo.innerText = 'Discount Coming Soon!';
-                    }
+                    discountInfo.innerText = foundDiscount.discount;
+                    discountInfo.classList.add('active');
                 }
 
                 dayElement.appendChild(dateElement);
