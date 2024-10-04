@@ -48,6 +48,14 @@
             color: #ff6347;
         }
 
+        .upcoming-discount {
+            font-size: 20px;
+            color: #ff6347;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
         .legend {
             max-width: 800px;
             margin: 20px auto;
@@ -62,11 +70,34 @@
             border-radius: 3px;
             margin: 0 10px;
         }
+
+        .month-nav {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .month-nav button {
+            padding: 10px 20px;
+            background-color: #ff6347;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .month-nav button:hover {
+            background-color: #e5533d;
+        }
     </style>
 </head>
 <body>
 
     <h1>Discount Calendar</h1>
+
+    <div class="month-nav">
+        <button onclick="prevMonth()">Previous</button>
+        <button onclick="nextMonth()">Next</button>
+    </div>
 
     <div class="calendar" id="calendar">
         <!-- Calendar days will be injected here by JavaScript -->
@@ -100,11 +131,14 @@
             { startDate: '2024-12-24', endDate: '2024-12-25', discount: '$150 off Ion Series, $80 off Atom 2 Series' }
         ];
 
-        function createCalendar(month, daysInMonth) {
+        let currentMonth = new Date().getMonth();  // Default to current month
+
+        function createCalendar(month) {
             const calendar = document.getElementById('calendar');
-            calendar.innerHTML = '';  // Clear the calendar if it's being generated for a new month
+            calendar.innerHTML = '';  // Clear the calendar for the new month
 
             const today = new Date();
+            const daysInMonth = new Date(today.getFullYear(), month + 1, 0).getDate();  // Get the number of days in the month
 
             for (let day = 1; day <= daysInMonth; day++) {
                 const currentDate = new Date(today.getFullYear(), month, day);
@@ -124,6 +158,15 @@
                     return currentDate >= startDate && currentDate <= endDate;
                 });
 
+                const isStartDate = discounts.find(d => new Date(d.startDate).toDateString() === currentDate.toDateString());
+
+                if (isStartDate) {
+                    const upcomingSign = document.createElement('div');
+                    upcomingSign.className = 'upcoming-discount';
+                    upcomingSign.innerText = '✨';  // Special sign for upcoming discount
+                    dayElement.appendChild(upcomingSign);
+                }
+
                 if (foundDiscount) {
                     const discountStartDate = new Date(foundDiscount.startDate);
                     if (today.getDate() === discountStartDate.getDate() - 1 && today.getMonth() === discountStartDate.getMonth()) {
@@ -140,8 +183,18 @@
             }
         }
 
-        // Initialize the calendar for October (Month 9 in JavaScript, because months are 0-indexed)
-        createCalendar(9, 31);
+        function prevMonth() {
+            currentMonth = (currentMonth - 1 + 12) % 12;  // Go to previous month, wrapping around the year
+            createCalendar(currentMonth);
+        }
+
+        function nextMonth() {
+            currentMonth = (currentMonth + 1) % 12;  // Go to next month, wrapping around the year
+            createCalendar(currentMonth);
+        }
+
+        // Initialize the calendar for the current month
+        createCalendar(currentMonth);
     </script>
 
 </body>
