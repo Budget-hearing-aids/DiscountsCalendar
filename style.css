@@ -1,0 +1,57 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f7f7f7;
+}
+
+.calendar {
+    width: 80%;
+    max-width: 1000px;
+    text-align: center;
+}
+
+#calendarGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.day {
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: white;
+    position: relative;
+}
+
+.upcoming {
+    background-color: #ffecb3;
+}
+
+.activeDiscount {
+    background-color: #c8e6c9;
+}
+
+.pastDiscount {
+    opacity: 0.4;
+}
+
+.hiddenDiscount {
+    color: #fff;
+}
+
+button {
+    margin: 10px;
+    padding: 10px;
+    background-color: #0288d1;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0277bd;
+}
