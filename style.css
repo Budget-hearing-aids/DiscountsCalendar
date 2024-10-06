@@ -13,11 +13,23 @@ body {
     text-align: center;
 }
 
+/* Month navigation section with previous and next buttons on the same line */
+.month-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#monthYear {
+    font-size: 24px; /* Increased size of the month text */
+    font-weight: bold;
+}
+
 #calendarGrid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 10px;
-    margin-top: 20px;
 }
 
 .day {
@@ -27,17 +39,20 @@ body {
     position: relative;
 }
 
+/* Styling for the upcoming discount days */
 .upcoming {
     background-color: #ffecb3;
     color: #555;
 }
 
+/* Styling for the active discount days */
 .activeDiscount {
     background-color: #c8e6c9;
     color: #000;
 }
 
-.pastDiscount {
+/* Dimming only the past days */
+.pastDay {
     opacity: 0.4;
 }
 
