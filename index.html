@@ -33,6 +33,12 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             position: relative;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .dimmed {
+            opacity: 0.5;
         }
 
         .day .date {
@@ -144,20 +150,23 @@
                 const discountInfo = document.createElement('div');
                 discountInfo.className = 'discount-info';
 
-                // Check if the current date is within the discount period (including start and end date)
                 const activeDiscount = discounts.find(d => {
                     const startDate = new Date(d.startDate);
                     const endDate = new Date(d.endDate);
                     return currentDate >= startDate && currentDate <= endDate;
                 });
 
-                // Check if the current date is one day before a discount starts
                 const isOneDayBefore = discounts.find(d => {
                     const startDate = new Date(d.startDate);
                     const oneDayBefore = new Date(startDate);
                     oneDayBefore.setDate(startDate.getDate() - 1);
                     return currentDate.toDateString() === oneDayBefore.toDateString();
                 });
+
+                // Dim the past days
+                if (currentDate < today) {
+                    dayElement.classList.add('dimmed');
+                }
 
                 // Show "Discount will be revealed soon!" if it's one day before the start date
                 if (isOneDayBefore) {
