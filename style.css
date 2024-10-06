@@ -29,18 +29,16 @@ body {
 
 .upcoming {
     background-color: #ffecb3;
+    color: #555;
 }
 
 .activeDiscount {
     background-color: #c8e6c9;
+    color: #000;
 }
 
 .pastDiscount {
     opacity: 0.4;
-}
-
-.hiddenDiscount {
-    color: #fff;
 }
 
 button {
