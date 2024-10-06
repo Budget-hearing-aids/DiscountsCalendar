@@ -1,8 +1,8 @@
 // Discount data
 const discountData = {
     "October": [
-        { start: "2024-10-08", end: "2024-10-09", description: "Ion Series $150 off prime day (2 emails 1 text each day)" },
-        { start: "2024-10-31", end: "2024-10-31", description: "Halloween sale (Atom 2 Series) - 2 emails 1 text" }
+        { start: "2024-10-08", end: "2024-10-09", description: "Ion Series $150 off prime day" },
+        { start: "2024-10-31", end: "2024-10-31", description: "Halloween sale (Atom 2 Series)" }
     ],
     "November": [
         { start: "2024-11-15", end: "2024-11-20", description: "$50 off 2 Series" },
