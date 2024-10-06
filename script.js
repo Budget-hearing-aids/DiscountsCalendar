@@ -45,7 +45,7 @@ function loadCalendar(date) {
                     const revealDate = new Date(discountStart);
                     revealDate.setDate(discountStart.getDate() - 1);
                     if (new Date(fullDate).toDateString() === revealDate.toDateString()) {
-                        dayDiv.innerText += "\nUpcoming: " + discount.description;
+                        dayDiv.innerText += "\nUpcoming Discount";
                         dayDiv.classList.add("upcoming");
                     }
                 }
