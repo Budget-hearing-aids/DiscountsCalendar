@@ -33,12 +33,11 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             position: relative;
-            opacity: 1;
-            transition: opacity 0.3s ease;
         }
 
-        .dimmed {
+        .day.dimmer {
             opacity: 0.5;
+            background-color: #e0e0e0;
         }
 
         .day .date {
@@ -107,11 +106,8 @@
 
     <script>
         const discounts = [
-            // October
             { startDate: '2024-10-08', endDate: '2024-10-09', discount: 'Ion Series $150 off Prime Day' },
             { startDate: '2024-10-31', endDate: '2024-10-31', discount: 'Halloween Sale (Atom 2 Series) - 2 Emails, 1 Text' },
-
-            // November
             { startDate: '2024-11-15', endDate: '2024-11-20', discount: '$50 off 2 Series' },
             { startDate: '2024-11-15', endDate: '2024-11-20', discount: '25% off Ion Series' },
             { startDate: '2024-11-21', endDate: '2024-11-24', discount: '20% off all products' },
@@ -119,8 +115,6 @@
             { startDate: '2024-11-29', endDate: '2024-12-01', discount: 'BOGO Atom 2 Series (Fri-Sun)' },
             { startDate: '2024-11-29', endDate: '2024-12-01', discount: '$150 off Ion Series (Fri-Sun)' },
             { startDate: '2024-12-02', endDate: '2024-12-04', discount: 'Final Sale: 20% off all products (Cyber Mon-Tues-Wed)' },
-
-            // December
             { startDate: '2024-12-02', endDate: '2024-12-09', discount: 'QVC Sale (12/2 - 12/9)' },
             { startDate: '2024-12-14', endDate: '2024-12-19', discount: 'QVC Sale (12/14 - 12/19)' },
             { startDate: '2024-12-05', endDate: '2024-12-09', discount: '$75 off Atom 2 Series' },
@@ -129,14 +123,14 @@
             { startDate: '2024-12-24', endDate: '2024-12-25', discount: '$150 off Ion Series, $80 off Atom 2 Series' }
         ];
 
-        let currentMonth = new Date().getMonth();  // Default to current month
+        let currentMonth = new Date().getMonth();
 
         function createCalendar(month) {
             const calendar = document.getElementById('calendar');
-            calendar.innerHTML = '';  // Clear the calendar for the new month
+            calendar.innerHTML = '';
 
             const today = new Date();
-            const daysInMonth = new Date(today.getFullYear(), month + 1, 0).getDate();  // Get the number of days in the month
+            const daysInMonth = new Date(today.getFullYear(), month + 1, 0).getDate();
 
             for (let day = 1; day <= daysInMonth; day++) {
                 const currentDate = new Date(today.getFullYear(), month, day);
@@ -150,12 +144,25 @@
                 const discountInfo = document.createElement('div');
                 discountInfo.className = 'discount-info';
 
+                // Dimming past days
+                if (currentDate < new Date(today.getFullYear(), today.getMonth(), today.getDate())) {
+                    dayElement.classList.add('dimmer');
+                }
+
+                // Check if the current date is within the discount period
                 const activeDiscount = discounts.find(d => {
                     const startDate = new Date(d.startDate);
                     const endDate = new Date(d.endDate);
                     return currentDate >= startDate && currentDate <= endDate;
                 });
 
+                // Show the actual discount on the start date and throughout its duration
+                if (activeDiscount) {
+                    discountInfo.innerText = activeDiscount.discount;
+                    discountInfo.classList.add('active');
+                }
+
+                // Show "Discount will be revealed soon!" one day before the discount starts
                 const isOneDayBefore = discounts.find(d => {
                     const startDate = new Date(d.startDate);
                     const oneDayBefore = new Date(startDate);
@@ -163,20 +170,8 @@
                     return currentDate.toDateString() === oneDayBefore.toDateString();
                 });
 
-                // Dim the past days
-                if (currentDate < today) {
-                    dayElement.classList.add('dimmed');
-                }
-
-                // Show "Discount will be revealed soon!" if it's one day before the start date
                 if (isOneDayBefore) {
                     discountInfo.innerText = 'Discount will be revealed soon!';
-                    discountInfo.classList.add('active');
-                }
-
-                // Show actual discount info if current date falls within the discount period
-                if (activeDiscount && currentDate >= new Date(activeDiscount.startDate)) {
-                    discountInfo.innerText = activeDiscount.discount;
                     discountInfo.classList.add('active');
                 }
 
@@ -187,16 +182,15 @@
         }
 
         function prevMonth() {
-            currentMonth = (currentMonth - 1 + 12) % 12;  // Go to previous month, wrapping around the year
+            currentMonth = (currentMonth - 1 + 12) % 12;
             createCalendar(currentMonth);
         }
 
         function nextMonth() {
-            currentMonth = (currentMonth + 1) % 12;  // Go to next month, wrapping around the year
+            currentMonth = (currentMonth + 1) % 12;
             createCalendar(currentMonth);
         }
 
-        // Initialize the calendar for the current month
         createCalendar(currentMonth);
     </script>
 
