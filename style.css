@@ -5,19 +5,12 @@ body {
     align-items: center;
     height: 100vh;
     background-color: #f7f7f7;
-    flex-direction: column; /* Ensures vertical stacking */
 }
 
 .calendar {
     width: 80%;
     max-width: 1000px;
     text-align: center;
-}
-
-.page-title {
-    font-size: 36px; /* Bigger font size for the title */
-    font-weight: bold;
-    margin-bottom: 10px;
 }
 
 /* Month navigation section with previous and next buttons on the same line */
