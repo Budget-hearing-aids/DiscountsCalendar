@@ -3,18 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discounts Calendar</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Ensure this links to your CSS file -->
+    <title>Discount Calendar</title> <!-- Page title -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1 style="text-align: center;">Discounts Calendar</h1>
-    <div id="calendarContainer">
-        <div id="monthYear"></div>
+    <div class="calendar">
+        <h1 class="page-title">Discounts Calendar</h1> <!-- Added the big title here -->
+        <div class="month-nav">
+            <button id="prevMonth">Previous Month</button>
+            <div id="monthYear"></div>
+            <button id="nextMonth">Next Month</button>
+        </div>
         <div id="calendarGrid"></div>
-        <button id="prevMonth">Previous Month</button>
-        <button id="nextMonth">Next Month</button>
     </div>
 
-    <script src="script.js"></script> <!-- Link to your JavaScript file -->
+    <script src="data.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
