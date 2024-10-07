@@ -2,14 +2,13 @@ const calendarGrid = document.getElementById("calendarGrid");
 const monthYear = document.getElementById("monthYear");
 let currentDate = new Date();
 
-const today = new Date(); // Current date for comparison
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 // Load the current month
 function loadCalendar(date) {
     const year = date.getFullYear();
     const month = date.getMonth();
-    monthYear.innerText = ${months[month]} ${year};
+    monthYear.innerText = `${months[month]} ${year}`;
     calendarGrid.innerHTML = "";
 
     const firstDay = new Date(year, month, 1).getDay();
@@ -25,9 +24,8 @@ function loadCalendar(date) {
     for (let day = 1; day <= daysInMonth; day++) {
         const dayDiv = document.createElement("div");
         dayDiv.classList.add("day");
-        const fullDate = ${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')};
-        const currentDay = new Date(fullDate);
-        
+        const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
         dayDiv.innerText = day;
 
         // Check discount data for current month
@@ -35,23 +33,21 @@ function loadCalendar(date) {
             discountData[months[month]].forEach(discount => {
                 const discountStart = new Date(discount.start);
                 const discountEnd = new Date(discount.end);
-                
-                // Calculate the day before the discount start date
-                const revealDate = new Date(discountStart);
-                revealDate.setDate(discountStart.getDate() - 1);
 
-                if (currentDay >= discountStart && currentDay <= discountEnd) {
-                    // Only show discount during its duration
-                    if (currentDay <= today) {
-                        dayDiv.innerText += \n${discount.description};
+                if (new Date(fullDate) >= discountStart && new Date(fullDate) <= discountEnd) {
+                    if (new Date(fullDate).toDateString() === new Date().toDateString() || new Date(fullDate) > new Date()) {
+                        dayDiv.innerText += `\n${discount.description}`;
                         dayDiv.classList.add("activeDiscount");
                     } else {
                         dayDiv.classList.add("pastDiscount");
                     }
-                } else if (currentDay < discountStart && currentDay.toDateString() === revealDate.toDateString()) {
-                    // Show 'Upcoming Discount' one day before the discount starts
-                    dayDiv.innerText += "\nUpcoming Discount";
-                    dayDiv.classList.add("upcoming");
+                } else if (new Date(fullDate) < discountStart) {
+                    const revealDate = new Date(discountStart);
+                    revealDate.setDate(discountStart.getDate() - 1);
+                    if (new Date(fullDate).toDateString() === revealDate.toDateString()) {
+                        dayDiv.innerText += "\nUpcoming Discount";
+                        dayDiv.classList.add("upcoming");
+                    }
                 }
             });
         }
