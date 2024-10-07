@@ -27,7 +27,7 @@ function loadCalendar(date) {
         dayDiv.classList.add("day");
         const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const currentDay = new Date(fullDate);
-        
+
         dayDiv.innerText = day;
 
         // Check discount data for current month
@@ -35,23 +35,15 @@ function loadCalendar(date) {
             discountData[months[month]].forEach(discount => {
                 const discountStart = new Date(discount.start);
                 const discountEnd = new Date(discount.end);
-                
-                // Calculate the day before the discount start date
-                const revealDate = new Date(discountStart);
-                revealDate.setDate(discountStart.getDate() - 1);
 
-                if (currentDay >= discountStart && currentDay <= discountEnd) {
-                    // Only show discount during its duration
-                    if (currentDay <= today) {
-                        dayDiv.innerText += `\n${discount.description}`;
-                        dayDiv.classList.add("activeDiscount");
-                    } else {
-                        dayDiv.classList.add("pastDiscount");
-                    }
-                } else if (currentDay < discountStart && currentDay.toDateString() === revealDate.toDateString()) {
-                    // Show 'Upcoming Discount' one day before the discount starts
-                    dayDiv.innerText += "\nUpcoming Discount";
-                    dayDiv.classList.add("upcoming");
+                // Show the discount starting one day before the actual discount start
+                const revealDate = new Date(discountStart);
+                revealDate.setDate(discountStart.getDate() - 1); // One day before discount start
+
+                if (currentDay >= revealDate && currentDay <= discountEnd) {
+                    // Show the discount on the cell for the start date, and all subsequent dates within the discount period
+                    dayDiv.innerText += `\n${discount.description}`;
+                    dayDiv.classList.add("activeDiscount");
                 }
             });
         }
