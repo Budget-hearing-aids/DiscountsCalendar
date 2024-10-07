@@ -9,7 +9,7 @@ const months = ["January", "February", "March", "April", "May", "June", "July", 
 function loadCalendar(date) {
     const year = date.getFullYear();
     const month = date.getMonth();
-    monthYear.innerText = `${months[month]} ${year}`;
+    monthYear.innerText = ${months[month]} ${year};
     calendarGrid.innerHTML = "";
 
     const firstDay = new Date(year, month, 1).getDay();
@@ -25,26 +25,28 @@ function loadCalendar(date) {
     for (let day = 1; day <= daysInMonth; day++) {
         const dayDiv = document.createElement("div");
         dayDiv.classList.add("day");
-        const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const fullDate = ${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')};
         const currentDay = new Date(fullDate);
-
+        
         dayDiv.innerText = day;
 
-        // Check discount data for the current month
+        // Check discount data for current month
         if (discountData[months[month]]) {
             discountData[months[month]].forEach(discount => {
                 const discountStart = new Date(discount.start);
                 const discountEnd = new Date(discount.end);
-
+                
                 // Calculate the day before the discount start date
                 const revealDate = new Date(discountStart);
                 revealDate.setDate(discountStart.getDate() - 1);
 
-                if (currentDay >= revealDate && currentDay <= discountEnd) {
-                    // Show discount on the start date and all days within the discount period
-                    if (currentDay <= today || currentDay >= discountStart) {
-                        dayDiv.innerText += `\n${discount.description}`;
+                if (currentDay >= discountStart && currentDay <= discountEnd) {
+                    // Only show discount during its duration
+                    if (currentDay <= today) {
+                        dayDiv.innerText += \n${discount.description};
                         dayDiv.classList.add("activeDiscount");
+                    } else {
+                        dayDiv.classList.add("pastDiscount");
                     }
                 } else if (currentDay < discountStart && currentDay.toDateString() === revealDate.toDateString()) {
                     // Show 'Upcoming Discount' one day before the discount starts
