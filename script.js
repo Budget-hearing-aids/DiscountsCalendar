@@ -30,20 +30,26 @@ function loadCalendar(date) {
 
         dayDiv.innerText = day;
 
-        // Check discount data for current month
+        // Check discount data for the current month
         if (discountData[months[month]]) {
             discountData[months[month]].forEach(discount => {
                 const discountStart = new Date(discount.start);
                 const discountEnd = new Date(discount.end);
 
-                // Show the discount starting one day before the actual discount start
+                // Calculate the day before the discount start date
                 const revealDate = new Date(discountStart);
-                revealDate.setDate(discountStart.getDate() - 1); // One day before discount start
+                revealDate.setDate(discountStart.getDate() - 1);
 
                 if (currentDay >= revealDate && currentDay <= discountEnd) {
-                    // Show the discount on the cell for the start date, and all subsequent dates within the discount period
-                    dayDiv.innerText += `\n${discount.description}`;
-                    dayDiv.classList.add("activeDiscount");
+                    // Show discount on the start date and all days within the discount period
+                    if (currentDay <= today || currentDay >= discountStart) {
+                        dayDiv.innerText += `\n${discount.description}`;
+                        dayDiv.classList.add("activeDiscount");
+                    }
+                } else if (currentDay < discountStart && currentDay.toDateString() === revealDate.toDateString()) {
+                    // Show 'Upcoming Discount' one day before the discount starts
+                    dayDiv.innerText += "\nUpcoming Discount";
+                    dayDiv.classList.add("upcoming");
                 }
             });
         }
