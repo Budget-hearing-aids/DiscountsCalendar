@@ -30,11 +30,6 @@ function loadCalendar(date) {
         
         dayDiv.innerText = day;
 
-        // Dimming past days only (not active discount days)
-        if (currentDay < today) {
-            dayDiv.classList.add("pastDay");
-        }
-
         // Check discount data for current month
         if (discountData[months[month]]) {
             discountData[months[month]].forEach(discount => {
@@ -50,6 +45,8 @@ function loadCalendar(date) {
                     if (currentDay <= today) {
                         dayDiv.innerText += `\n${discount.description}`;
                         dayDiv.classList.add("activeDiscount");
+                    } else {
+                        dayDiv.classList.add("pastDiscount");
                     }
                 } else if (currentDay < discountStart && currentDay.toDateString() === revealDate.toDateString()) {
                     // Show 'Upcoming Discount' one day before the discount starts
